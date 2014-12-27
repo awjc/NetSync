@@ -52,6 +52,12 @@ public class NetSyncClient {
 				if (!p.equals(prevPoint)) {
 					out.println(clientNum + "|" + (int)p.getX() + "|" + (int)p.getY());
 					prevPoint = p;
+				} else {
+					try{
+						Thread.sleep(10);
+					} catch(InterruptedException e){
+						e.printStackTrace();
+					}
 				}
 			}
 		} catch (SocketException e) {
