@@ -1,12 +1,13 @@
 package core;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Scanner;
 
 import core.InputReader.MessageCallback;
 
@@ -21,6 +22,7 @@ public class NetSyncClient {
 				host = args[0];
 			}
 			server = new Socket(host, PORT_NUM);
+			server.setTcpNoDelay(true);
 			System.out.println("===== CONNECTED TO SERVER AT " + host + ":" + PORT_NUM + " =====");
 			BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
 			PrintWriter out = new PrintWriter(server.getOutputStream(), true);
@@ -38,12 +40,20 @@ public class NetSyncClient {
 				}
 			})).start();
 			
-			Scanner kb = new Scanner(System.in);
-			while (kb.hasNextLine()) {
-				String message = kb.nextLine();
-				out.println(clientNum + "|" + message);
+//			Scanner kb = new Scanner(System.in);
+//			while (kb.hasNextLine()) {
+//				String message = kb.nextLine();
+//				out.println(clientNum + "|" + message);
+//			}
+//			kb.close();
+			Point prevPoint = null;
+			while (true) {
+				Point p = MouseInfo.getPointerInfo().getLocation();
+				if (!p.equals(prevPoint)) {
+					out.println(clientNum + "|" + (int)p.getX() + "|" + (int)p.getY());
+					prevPoint = p;
+				}
 			}
-			kb.close();
 		} catch (SocketException e) {
 			System.err.println("Server disconnected. Exiting...");
 			System.exit(1);
