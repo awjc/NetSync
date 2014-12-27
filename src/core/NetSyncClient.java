@@ -36,7 +36,10 @@ public class NetSyncClient {
 				@Override
 				public void messageReceived(String message){
 					String[] words = message.split("\\|");
-					System.err.println("[client #" + words[0] + "]: " + message.substring(message.indexOf("|") + 1));
+//					System.err.println("[client #" + words[0] + "]: " + message.substring(message.indexOf("|") + 1));
+					int x = Integer.parseInt(words[1]);
+					int y = Integer.parseInt(words[2]);
+					RobotHandler.getRobot().mouseMove(x, y);
 				}
 			})).start();
 			
