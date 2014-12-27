@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 import core.InputReader.MessageCallback;
@@ -32,7 +33,8 @@ public class NetSyncClient {
 			new Thread(new InputReader(in, new MessageCallback(){
 				@Override
 				public void messageReceived(String message){
-					System.err.println("MESSAGE RECEIVED: " + message);
+					String[] words = message.split("\\|");
+					System.err.println("[client #" + words[0] + "]: " + message.substring(message.indexOf("|") + 1));
 				}
 			})).start();
 			
@@ -42,6 +44,9 @@ public class NetSyncClient {
 				out.println(clientNum + "|" + message);
 			}
 			kb.close();
+		} catch (SocketException e) {
+			System.err.println("Server disconnected. Exiting...");
+			System.exit(1);
 		} catch(IOException e){
 			e.printStackTrace();
 		} finally {

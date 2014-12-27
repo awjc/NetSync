@@ -41,7 +41,7 @@ public class NetSyncServer {
 						int clientNum = Integer.parseInt(words[0]);
 						for (int i=0; i < outs.size(); i++) {
 							if (i != clientNum) {
-								outs.get(i).println(message.substring(message.indexOf("|")+1));
+								outs.get(i).println(message);
 							}
 						}
 					}
